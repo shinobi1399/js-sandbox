@@ -18,7 +18,7 @@ export class AutoCompleteFormGroupComponent implements OnInit {
   }
   ngOnInit() {
     this._formGroup = this._formBuilder.group({
-      country: [Validators.required],
+      country: ['', [Validators.required]],
       codename: []
     });
 

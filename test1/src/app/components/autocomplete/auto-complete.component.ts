@@ -1,4 +1,4 @@
-import {Component, forwardRef, Host, Injector, OnInit, Optional, Provider, Self} from '@angular/core';
+import {Component, forwardRef, Host, Injector, Input, OnInit, Optional, Provider, Self} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor, FormControl, FormControlDirective, NG_VALUE_ACCESSOR, NgControl,
@@ -16,23 +16,21 @@ const CONTROL_VALUE_ACCESSOR: Provider = {
   template: `
     <input name='country' [formControl]="control.control"/>
   `,
+  styles: ['.ng-invalid {border-color: red}'],
+
   providers: [CONTROL_VALUE_ACCESSOR]
 })
 export class AutoCompleteComponent implements ControlValueAccessor, OnInit {
+  @Input() validationMessages: { [key: string]: string };
+
   control: NgControl;
-  formControl: AbstractControl = new FormControl('country');
+
   ngOnInit(): void {
-
     this.control = this._injector.get(NgControl);
-    this.formControl = this.control.control;
-    console.log('control', this.formControl );
-
   }
 
 
-
   constructor(@Self() private _injector: Injector) {
-    this.formControl = new FormControl('country');
   }
 
   onChange = (_: any) => {
