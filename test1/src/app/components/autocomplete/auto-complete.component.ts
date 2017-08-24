@@ -1,7 +1,10 @@
-import {Component, forwardRef, Host, Injector, Input, OnInit, Optional, Provider, Self} from '@angular/core';
+import {
+  AfterViewInit, Component, forwardRef, Host, Injector, Input, OnInit, Optional, Provider,
+  Self
+} from '@angular/core';
 import {
   AbstractControl,
-  ControlValueAccessor, FormControl, FormControlDirective, NG_VALUE_ACCESSOR, NgControl,
+  ControlValueAccessor, FormControl, FormControlDirective, FormControlName, NG_VALUE_ACCESSOR, NgControl,
   NgModel
 } from '@angular/forms';
 
@@ -16,9 +19,10 @@ const CONTROL_VALUE_ACCESSOR: Provider = {
   template: `
     <div class="input-field">
       <div class="input-wrapper">
-        <input name='country' [formControl]="_ngControl.control"/>
+        <input *ngIf="!!_formControlDirective" name='country' [formControl]="formControl"/>
+        <input *ngIf="!!_ngModelDirective" name='country' [formControl]="formControl"/>
       </div>
-      <div *ngIf="_ngControl.control.touched && !_ngControl.control.valid">
+      <div *ngIf="_formControlDirective.control.touched && !_formControlDirective.control.valid">
         <span class="error-message">{{errorMessage}}</span>
       </div>
     </div>
@@ -27,15 +31,27 @@ const CONTROL_VALUE_ACCESSOR: Provider = {
 
   providers: [CONTROL_VALUE_ACCESSOR]
 })
-export class AutoCompleteComponent implements ControlValueAccessor, OnInit {
+export class AutoCompleteComponent implements ControlValueAccessor, OnInit, AfterViewInit {
   @Input() validationMessages: { [key: string]: string };
 
-  _ngControl: NgControl;
-  _formControl: AbstractControl;
+  _formControlDirective: FormControlDirective;
+  _ngModelDirective: NgModel;
+  _formNameDirective: FormControlName
+
+  get formControl() {
+    if (this._formControlDirective) {
+      return this._formControlDirective.control;
+    } else if (this._ngModelDirective) {
+      return this._ngModelDirective.control;
+    } else if (this._formNameDirective) {
+      return this._formNameDirective.control;
+    }
+    return null;
+  }
 
   get errorMessage(): string {
-    if (this._ngControl.control && this._ngControl.control.errors) {
-      const errors = this._ngControl.control.errors;
+    if (this._formControlDirective.control && this._formControlDirective.control.errors) {
+      const errors = this._formControlDirective.control.errors;
 
       for (const key in errors) {
         if (errors[key]) {
@@ -51,9 +67,19 @@ export class AutoCompleteComponent implements ControlValueAccessor, OnInit {
     }
   }
 
+  ngAfterViewInit(): void {
+
+    console.log('formcontrol', this.formControl);
+    if(this.formControl) {
+      this.formControl.valueChanges.subscribe(val => console.log('new value', val));
+    }
+  }
+
   ngOnInit(): void {
-    this._ngControl = this._injector.get(NgControl);
-    this._formControl = this._ngControl.control;
+    this._formControlDirective = this._injector.get(FormControlDirective, null);
+    this._ngModelDirective = this._injector.get(NgModel, null);
+    this._formNameDirective = this._injector.get(FormControlName, null);
+
 
   }
 

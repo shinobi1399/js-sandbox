@@ -1,14 +1,20 @@
+<div>
 <p>
-  auto-complete-form-group works!
-</p>
-<p>
-
+Form Control
   <app-auto-complete name="country" [formControl]="this._formGroup.get('country')" [validationMessages]="{required: 'This field is required'}"></app-auto-complete>
 </p>
-
 <p>
   country selected: {{country}}
 </p>
 <p>
   {{debug}}
 </p>
+</div>
+
+<div>
+  <app-auto-complete [(ngModel)]="ngModelValue"></app-auto-complete>
+  <input [(ngModel)]="ngModelValue"/>
+  <p>
+    ngModel: {{ngModelValue}}
+  </p>
+</div>

@@ -10,6 +10,7 @@ export class AutoCompleteFormGroupComponent implements OnInit {
   country: string = null;
   _formGroup: FormGroup;
   _value: any;
+  ngModelValue: string = 'initial value';
   constructor(private _formBuilder: FormBuilder) {
   }
 

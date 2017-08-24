@@ -8,7 +8,7 @@ import {routeRoutes} from './app.router';
 import {AutoCompleteModule} from './components/autocomplete/auto-complete.module';
 import {AutoCompleteContainerComponent} from './containers/autocomplete-demo/autocomplete.container';
 import { AutoCompleteFormGroupComponent } from './containers/autocomplete-demo/form-group/form-group.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,6 +22,7 @@ import {ReactiveFormsModule} from '@angular/forms';
     CalculatorModule.forRoot(),
     AutoCompleteModule.forRoot(),
     ReactiveFormsModule,
+    FormsModule,
     routeRoutes
   ],
   providers: [],
