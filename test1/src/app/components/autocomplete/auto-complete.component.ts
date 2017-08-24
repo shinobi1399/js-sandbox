@@ -14,19 +14,47 @@ const CONTROL_VALUE_ACCESSOR: Provider = {
 @Component({
   selector: 'app-auto-complete',
   template: `
-    <input name='country' [formControl]="control.control"/>
+    <div class="input-field">
+      <div class="input-wrapper">
+        <input name='country' [formControl]="_ngControl.control"/>
+      </div>
+      <div *ngIf="_ngControl.control.touched && !_ngControl.control.valid">
+        <span class="error-message">{{errorMessage}}</span>
+      </div>
+    </div>
   `,
-  styles: ['.ng-invalid {border-color: red}'],
+  styleUrls: ['./auto-complete.component.scss'],
 
   providers: [CONTROL_VALUE_ACCESSOR]
 })
 export class AutoCompleteComponent implements ControlValueAccessor, OnInit {
   @Input() validationMessages: { [key: string]: string };
 
-  control: NgControl;
+  _ngControl: NgControl;
+  _formControl: AbstractControl;
+
+  get errorMessage(): string {
+    if (this._ngControl.control && this._ngControl.control.errors) {
+      const errors = this._ngControl.control.errors;
+
+      for (const key in errors) {
+        if (errors[key]) {
+
+
+          const message = this.validationMessages[key];
+          if (message) {
+            return message;
+          }
+          return 'Invalid value: ' + key;
+        }
+      }
+    }
+  }
 
   ngOnInit(): void {
-    this.control = this._injector.get(NgControl);
+    this._ngControl = this._injector.get(NgControl);
+    this._formControl = this._ngControl.control;
+
   }
 
 

@@ -1,0 +1,26 @@
+.input-wrapper input.ng-invalid.ng-touched   {
+  border-color: red;
+}
+
+.input-field {
+  font-family: "AtlasGrotesk","Open Sans",sans-serif;
+}
+.input-wrapper input {
+  border: 1px solid #bdc4c9;
+  font-size: 16px;
+  padding: 5px 6px;
+  width: 100%;
+  margin: 2px 0 5px;
+  min-height: 34px;
+  line-height: normal;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-radius: 3px;
+  -webkit-appearance: none;
+}
+
+span.error-message {
+  color: #e82110;
+  display: block;
+  font-size: 12px;
+}
